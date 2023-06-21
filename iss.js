@@ -21,11 +21,25 @@ const fetchMyIP = function(callback) {
 
     // Error Handling: Print the error(s) if one occurred.
     // Note: `if(error === true)` DOES NOT WORK. You must use `if (error)`.
+    // For regular errors:
     if (error) {
 
       // If the request returns an error, invoke the callback and return the
       // `error` object and null for the `description` parameter.
       callback(error, null);
+
+    }
+
+
+    // If the request goes through...but the status code is not 200, then
+    // the request failed in a way that requires particular handling. This
+    // code block creates a new Error object that can be passed around. Since
+    // this is only helper function, you don't want to handle it here, just
+    // bubble it back to the caller via the callback.
+    if (response.statusCode !== 200) {
+
+      const message = `Status Code ${response.statusCode} when fetching IP. Response: ${body}`;
+      return callback(Error(message), null);
 
       // If the request goes through...
     } else {

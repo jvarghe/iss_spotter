@@ -52,11 +52,12 @@ const { fetchMyIP } = require('./iss');
 
 
 // This function will call a service to check your IP Address and return it.
-fetchMyIP((error, ip) => {
-  if (error) {
-    console.log("It didn't work!", error);
-    return;
-  }
+// fetchMyIP((error, ip) => {
 
-  console.log('It worked! Returned IP:', ip);
-});
+//   if (error) {
+//     console.log("It didn't work!", error);
+//     return;
+//   }
+
+//   console.log('It worked! Returned IP:', ip);
+// });
