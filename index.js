@@ -37,13 +37,23 @@
  *     Next pass at Fri Jun 01 2021 19:26:12 GMT-0700 (Pacific Daylight Time) for 643 seconds!
  *
  *
- * STEP 1: API CALL#1: FETCH IP ADDRESS
+ * STEP 1: API CALL #1: FETCH IP ADDRESS
  *
  * Let's start with step 1, which is to fetch our public IP Address, which will
  * later help (approximately) locate us geographically. Define a function
  * `fetchMyIP` which will asynchronously return our IP Address using an API.
  *
  *
+ * STEP 2: API CALL #2: FETCH GEO COORDINATES BY IP
+ *
+ * Our next function, `fetchCoordsByIP()` will be one that takes in an IP
+ * address and returns the latitude and longitude for it.
+ *
+ * There are again various APIs that can help. We'll go with `ipwho.is`. Give
+ * the documentation a brief look, but don't read too deeply.
+ *
+ * Perform the same incremental steps as we did earlier with the `fetchMyIP()`
+ * function.
  */
 
 
