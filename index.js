@@ -58,7 +58,8 @@
 
 
 // IMPORTS
-const { fetchMyIP } = require('./iss');
+const { fetchMyIP } = require("./iss.js");
+const { fetchCoordsByIP } = require("./iss.js");
 
 
 // This function will call a service to check your IP Address and return it.
@@ -71,3 +72,18 @@ const { fetchMyIP } = require('./iss');
 
 //   console.log('It worked! Returned IP:', ip);
 // });
+
+
+
+// The function takes your local IP and returns your geo-coordinates of your
+// location.
+fetchCoordsByIP("178.249.214.10", (error, data) => {
+
+  if (error) {
+    console.log("It didn't work!", error);
+    return;
+  }
+
+  console.log('It worked! :', data);
+
+});
