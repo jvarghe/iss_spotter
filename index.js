@@ -54,12 +54,22 @@
  *
  * Perform the same incremental steps as we did earlier with the `fetchMyIP()`
  * function.
+ *
+ * STEP3: API CALL #3: FETCH FLYOVER TIMES FOR ISS
+ *
+ * This exercise will use an API that gives an easy-to-use JSON API for ISS
+ * flyover mock data. "Mock data", you ask? Yes. Right now, we're going to use
+ * an API that returns mock data to simulate an API that existed until recently
+ * which used real NASA data and offered actual fly-over times (that API has
+ * been deprecated). Read the API Documenation below to understand how to make
+ * a request, which inputs are required, and which inputs are optional.
  */
 
 
 // IMPORTS
 const { fetchMyIP } = require("./iss.js");
 const { fetchCoordsByIP } = require("./iss.js");
+const { fetchISSFlyOverTimes } = require("./iss.js");
 
 
 // This function will call a service to check your IP Address and return it.
@@ -70,7 +80,7 @@ const { fetchCoordsByIP } = require("./iss.js");
 //     return;
 //   }
 
-//   console.log('It worked! Returned IP:', ip);
+//   console.log("It worked! Returned IP:", ip);
 // });
 
 
@@ -84,6 +94,21 @@ const { fetchCoordsByIP } = require("./iss.js");
 //     return;
 //   }
 
-//   console.log('It worked! :', coordinates);
+//   console.log("It worked! :", coordinates);
 
 // });
+
+
+// This function will take an object specifying the latitude & longtitude of
+// your location and returns an object containing the next flyover times of
+// the ISS.
+fetchISSFlyOverTimes(locationCoords, (error, flyoverTimes) => {
+
+  if (error) {
+    console.log("It didn't work!", error);
+    return;
+  }
+
+  console.log("It worked! :", flyoverTimes);
+
+});

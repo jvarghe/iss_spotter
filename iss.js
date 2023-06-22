@@ -66,6 +66,7 @@ const fetchMyIP = function(callback) {
 };
 
 
+
 // This function will query an geo-location service and send them your local IP.
 // The service will return the latitude & longitude of your location as an
 // object.
@@ -82,7 +83,7 @@ const fetchCoordsByIP = function(ip, callback) {
     // what it looks like:
     // console.log(body);
 
-    // The body looks like a JSON string. It will need to deserialized into
+    // The body looks like a JSON string. It will need to be deserialized into
     // a JavaScript Object.
     const bodyObj = JSON.parse(body);
 
@@ -119,7 +120,69 @@ const fetchCoordsByIP = function(ip, callback) {
       // Return this object to caller.
       callback(null, geoLocationObj);
 
+    }
 
+  });
+
+};
+
+
+
+/**
+ * Makes a single API request to retrieve upcoming ISS fly over times the for
+ * the given lat/lng coordinates.
+ *
+ * Input:
+ *   - An object with keys `latitude` and `longitude`
+ *   - A callback (to pass back an error or the array of resulting data)
+ *
+ * Returns (via Callback):
+ *   - An error, if any (nullable)
+ *   - The fly over times as an array of objects (null if error). Example:
+ *     [ { risetime: 134564234, duration: 600 }, ... ]
+ */
+const fetchISSFlyOverTimes = function(locationCoords, callback) {
+
+  const flyoverUrl = ` https://iss-flyover.herokuapp.com/json/?lat=${locationCoords.latitude}&lon=${locationCoords.longitude}`;
+
+  // Query the Mock Flyover Times API to find your co-ordinates.
+  request(flyoverUrl, (error, response, body) => {
+
+    // The body looks like a JSON string. It will need to be deserialized into
+    // a JavaScript Object.
+    const bodyObj = JSON.parse(body);
+    // console.log(bodyObj);
+
+    if (error) {
+
+      // If the request returns an error, invoke the callback and return the
+      // `error` object and null for the `description` parameter.
+      callback(error, null);
+      return;
+
+    }
+
+    // This server doesn't seem to send back status code errors. If the
+    // request goes through successfully and the server returns a response...
+    // but the response notes a failure...
+    if (bodyObj.message !== "success") {
+
+      // Create a message about the error and fill it with necessary details...
+      const message = `Error Message: ${bodyObj.message} when fetching ISS Flyover times.`;
+      // ... and bubble it back to the caller, so they can deal with it.
+      callback(Error(message), null);
+
+    } else {
+
+      // We need only the flyover times from the body, so extract them into
+      // this object:
+      const flyoverTimesObj = bodyObj.response;
+
+      // This is an array of objects with two elements, `risetime` & `duration`.
+      // console.log(flyoverTimesObj);
+
+      // Return this object to caller.
+      callback(null, flyoverTimesObj);
 
     }
 
@@ -128,5 +191,6 @@ const fetchCoordsByIP = function(ip, callback) {
 };
 
 
+
 // EXPORTS
-module.exports = { fetchMyIP, fetchCoordsByIP };
+module.exports = { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes };
