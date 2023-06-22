@@ -77,13 +77,13 @@ const { fetchCoordsByIP } = require("./iss.js");
 
 // The function takes your local IP and returns your geo-coordinates of your
 // location.
-// fetchCoordsByIP("178.249.214.10", (error, data) => {
+// fetchCoordsByIP("178.249.214.10", (error, coordinates) => {
 
 //   if (error) {
 //     console.log("It didn't work!", error);
 //     return;
 //   }
 
-//   console.log('It worked! :', data);
+//   console.log('It worked! :', coordinates);
 
 // });
