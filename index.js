@@ -123,6 +123,7 @@ const { nextISSTimesForMyLocation } = require("./iss.js");
 // });
 
 
+
 /* This function will invoke `fetchMyIP()`, `fetchCoordsByIP()`, and
  * `fetchISSFlyOverTimes()` to fetch the local user's IP address, determine
  * their latitude & longitude, and lastly, find the flyover times for the ISS.
@@ -134,6 +135,33 @@ nextISSTimesForMyLocation((error, flyoverTimes) => {
     return;
   }
 
-  console.log("It worked! :", flyoverTimes);
+  // Test if this functions works:
+  // console.log("It worked! :", flyoverTimes);
+
+  // Print times and durations more clearly.
+  printFlyoverTimes(flyoverTimes);
 
 });
+
+
+// This function will simply print fly-over times and durations of the ISS in
+// an easy readable format.
+const printFlyoverTimes = function(flyoverTimes) {
+
+  // Iterate over the object...
+  for (const passOverTime of flyoverTimes) {
+
+    // Create a new `datetime` object.
+    const datetime = new Date(0);
+
+    // Add the `risetime` to it.
+    datetime.setUTCSeconds(passOverTime.risetime);
+
+    // Add the duration to the datetime.
+    const duration = passOverTime.duration;
+
+    // Log it to console.
+    console.log(`The ISS will next pass over your location at ${datetime} for ${duration} seconds!`);
+  }
+
+};
