@@ -1,6 +1,4 @@
 // IMPORTS
-const { func } = require("assert-plus");
-const { REFUSED } = require("dns");
 const request = require("request");
 
 
@@ -143,15 +141,10 @@ const fetchCoordsByIP = function(ip, callback) {
  */
 const fetchISSFlyOverTimes = function(locationCoords, callback) {
 
-  const flyoverUrl = ` https://iss-flyover.herokuapp.com/json/?lat=${locationCoords.latitude}&lon=${locationCoords.longitude}`;
+  const flyoverUrl = `https://iss-flyover.herokuapp.com/json/?lat=${locationCoords.latitude}&lon=${locationCoords.longitude}`;
 
   // Query the Mock Flyover Times API to find your co-ordinates.
   request(flyoverUrl, (error, response, body) => {
-
-    // The body looks like a JSON string. It will need to be deserialized into
-    // a JavaScript Object.
-    const bodyObj = JSON.parse(body);
-    // console.log(bodyObj);
 
     if (error) {
 
@@ -162,6 +155,11 @@ const fetchISSFlyOverTimes = function(locationCoords, callback) {
 
     }
 
+    // The body looks like a JSON string. It will need to be deserialized into
+    // a JavaScript Object.
+    const bodyObj = JSON.parse(body);
+    // console.log(bodyObj);
+
     // This server doesn't seem to send back status code errors. If the
     // request goes through successfully and the server returns a response...
     // but the response notes a failure...
@@ -170,7 +168,7 @@ const fetchISSFlyOverTimes = function(locationCoords, callback) {
       // Create a message about the error and fill it with necessary details...
       const message = `Error Message: ${bodyObj.message} when fetching ISS Flyover times.`;
       // ... and bubble it back to the caller, so they can deal with it.
-      callback(Error(message), null);
+      callback(message, null);
 
     } else {
 
@@ -191,6 +189,74 @@ const fetchISSFlyOverTimes = function(locationCoords, callback) {
 };
 
 
+/**
+ * Orchestrates multiple API requests in order to determine the next 5 upcoming
+ * ISS fly overs for the user's current location.
+ *
+ * Input:
+ *
+ *   - A callback with an error or results.
+ *
+ * Returns (via Callback):
+ *
+ *   - An error, if any (nullable)
+ *   - The fly-over times as an array (null if error):
+ *     [ { risetime: <number>, duration: <number> }, ... ]
+ */
+const nextISSTimesForMyLocation = function(callback) {
+
+  // STEP 1: Call `fetchMyIP()`...
+  fetchMyIP((error, ip) => {
+
+    // NOTE: Because this is an asynchronous function call, this step is
+    // particularly likely to fail. So, the FIRST THING TO DO when you are
+    // invoking callbacks, and especially when you're nesting callbacks, is to
+    // handle the errors. If the callback executes properly, you can move on
+    // to the next step.
+    if (error) {
+      callback(error, null);
+    }
+
+
+    // Step 1 should have returned the IP address or an error. If the program
+    // made it to this point, the first callback must have executed without
+    // errors.
+    //
+    // STEP 2: Call `fetchCoordsByIP()`...
+    fetchCoordsByIP(ip, (err, coords) => {
+
+      if (error) {
+        callback(error, null);
+      }
+
+      // Step 2 should have returned an object with the geographical
+      // co-ordinates of the IP.
+      //
+      // STEP 3: Call `fetchISSFlyOverTimes()`...
+      fetchISSFlyOverTimes(coords, (error, times) => {
+
+        if (error) {
+          callback(error, null);
+        }
+
+
+        // If the third callback also executes without issues, then you should
+        // have an array containing an object. The object will contain 5
+        // "risetime's"; the times of the next 5 ISS flyovers over your position.
+        // Return this object to the caller.
+        callback(null, times);
+
+      });
+
+    });
+
+  });
+
+};
+
+
 
 // EXPORTS
-module.exports = { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes };
+module.exports = { /* fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes, */
+  nextISSTimesForMyLocation
+};

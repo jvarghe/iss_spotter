@@ -61,15 +61,22 @@
  * flyover mock data. "Mock data", you ask? Yes. Right now, we're going to use
  * an API that returns mock data to simulate an API that existed until recently
  * which used real NASA data and offered actual fly-over times (that API has
- * been deprecated). Read the API Documenation below to understand how to make
+ * been deprecated). Read the API Documentation below to understand how to make
  * a request, which inputs are required, and which inputs are optional.
  */
 
 
 // IMPORTS
-const { fetchMyIP } = require("./iss.js");
-const { fetchCoordsByIP } = require("./iss.js");
-const { fetchISSFlyOverTimes } = require("./iss.js");
+// const { fetchMyIP } = require("./iss.js");
+// const { fetchCoordsByIP } = require("./iss.js");
+// const { fetchISSFlyOverTimes } = require("./iss.js");
+const { nextISSTimesForMyLocation } = require("./iss.js");
+
+
+// NOTE: The API Calls to `fetchMyIP()`, `fetchCoordsByIP()`, and
+// `fetchISSFlyOverTimes()` were used for testing, but will not be used by this
+// program because `nextISSTimesForMyLocation()` is responsible for invoking
+// all three of these methods.
 
 
 // This function will call a service to check your IP Address and return it.
@@ -98,11 +105,29 @@ const { fetchISSFlyOverTimes } = require("./iss.js");
 
 // });
 
+// For testing `fetchISSFlyOverTimes()`:
+// const locationCoords = {latitude: 43.652432, longitude: -79.3832198 };
 
-// This function will take an object specifying the latitude & longtitude of
+// This function will take an object specifying the latitude & longitude of
 // your location and returns an object containing the next flyover times of
 // the ISS.
-fetchISSFlyOverTimes(locationCoords, (error, flyoverTimes) => {
+// fetchISSFlyOverTimes(locationCoords, (error, flyoverTimes) => {
+
+//   if (error) {
+//     console.log("It didn't work!", error);
+//     return;
+//   }
+
+//   console.log("It worked! :", flyoverTimes);
+
+// });
+
+
+/* This function will invoke `fetchMyIP()`, `fetchCoordsByIP()`, and
+ * `fetchISSFlyOverTimes()` to fetch the local user's IP address, determine
+ * their latitude & longitude, and lastly, find the flyover times for the ISS.
+ */
+nextISSTimesForMyLocation((error, flyoverTimes) => {
 
   if (error) {
     console.log("It didn't work!", error);
