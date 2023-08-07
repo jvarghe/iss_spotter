@@ -1,5 +1,14 @@
 /* M02 W05 CHALLENGE: ISS SPOTTER (INTERNATIONAL SPACE STATION)
  *
+ * Note: This challenge is implemented first WITHOUT promises and then WITH
+ * promises. For this reason, it has been implemented twice in two sets of
+ * files: The version WITHOUT promises is implemented in `index.js` and
+ * `iss.js`. The version WITH promises is implemented in `index2.js` and
+ * `iss_promised.js`.
+ *
+ *
+ * THE CHALLENGE
+ *
  * For this activity, we will solve a slightly larger problem because it will
  * require us to make multiple API requests in succession in order to answer a
  * larger question. We'll also be writing unit tests for it, and therefore
