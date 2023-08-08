@@ -76,4 +76,6 @@ const nextISSTimesForMyLocation = function() {
 module.exports = { nextISSTimesForMyLocation };
 
 // FOR SECONDARY INVOCATION
+// You cannot have two `module.exports` objects. If you enable this, make
+// sure you disable the other one.
 // module.exports = { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes };

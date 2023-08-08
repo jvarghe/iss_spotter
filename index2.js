@@ -17,6 +17,9 @@
  *
  * THE CHALLENGE: ISS SPOTTER WITH PROMISES
  *
+ * The goal is to avoid "Callback Hell"; so we're implementing `index.js` and
+ * `iss.js`, this time using promises.
+ *
  * In order to use promises, our HTTP request library needs to support them.
  * `request`, which we've used thus far, does not use promises. We need an
  * alternative.
